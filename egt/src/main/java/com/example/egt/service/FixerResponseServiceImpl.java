@@ -6,6 +6,7 @@ import com.example.egt.repository.FixerResponseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -45,5 +46,4 @@ public class FixerResponseServiceImpl implements FixerResponseService{
     public FixerResponse create(FixerResponse fixerResponse) {
         return fixerRepo.save(fixerResponse);
     }
-
 }
