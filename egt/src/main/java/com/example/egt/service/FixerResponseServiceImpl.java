@@ -1,7 +1,9 @@
 package com.example.egt.service;
 
 
+import com.example.egt.model.ApiRequest;
 import com.example.egt.model.FixerResponse;
+import com.example.egt.repository.ApiRequestRepository;
 import com.example.egt.repository.FixerResponseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,7 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,24 +32,19 @@ public class FixerResponseServiceImpl implements FixerResponseService{
     @Value("${url}")
     private String url;
 
-    @Value("accessKey")
-    private String accessKey;
+    private final ApiRequestRepository apiRequestRepository;
 
-    @Value("format")
-    private String format;
 
     @Override
     @Scheduled(fixedRateString = "${interval}")
-    public FixerResponse createFixerResponse() {
+    @Transactional(rollbackFor = Exception.class)
+    public FixerResponse fetchFixerData() {
         log.info("Downloading....");
 
-        ResponseEntity<FixerResponse> response ;
-        log.info(restTemplate.getForEntity(url, String.class)); //Да видя как се подават параметри и където е url да ги подам!
-        return null;
+        ResponseEntity<FixerResponse> response = restTemplate.getForEntity(url, FixerResponse.class);
+        log.info(restTemplate.getForEntity(url, FixerResponse.class));
+
+        return fixerRepo.save(Objects.requireNonNull(response.getBody()));
     }
 
-    @Override
-    public FixerResponse create(FixerResponse fixerResponse) {
-        return fixerRepo.save(fixerResponse);
-    }
 }

@@ -7,8 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface FixerResponseService {
 
-    FixerResponse createFixerResponse();
-
-    FixerResponse create(FixerResponse fixerResponse);
-
+    FixerResponse fetchFixerData();
 }

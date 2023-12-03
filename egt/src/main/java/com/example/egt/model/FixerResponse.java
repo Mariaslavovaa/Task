@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,7 +22,7 @@ import java.util.Map;
 public class FixerResponse implements Serializable {
     @Id
     @Column(name = "timestamp")
-    private Long timestamp;
+    private String timestamp;
 
     @Column(name = "success")
     private Boolean success;
@@ -31,8 +33,8 @@ public class FixerResponse implements Serializable {
     @Column(name = "date")
     private LocalDate date;
 
-    @OneToMany
-    @JoinColumn(name = "currency")
-    private List<Rate> rates;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition="JSON")
+    private Map<String, BigDecimal> rates;
 
 }

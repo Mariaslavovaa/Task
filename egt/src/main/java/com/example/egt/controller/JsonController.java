@@ -1,26 +1,34 @@
 package com.example.egt.controller;
 
-import com.example.egt.dto.FixerResponseDto;
+import com.example.egt.dto.ApiRequestDTO;
 import com.example.egt.model.FixerResponse;
-import com.example.egt.service.FixerResponseService;
+import com.example.egt.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 
 @RestController
-@RequestMapping("fixer-api/json")
+@RequestMapping("/json_api")
 @RequiredArgsConstructor
 public class JsonController {
-    private final FixerResponseService fixerService;
+    private final StatisticsService service;
 
-    @PostMapping("/create")  // return FixerResponseDto but first make HashMap correct
-    public ResponseEntity<FixerResponse> create(){
-        return new ResponseEntity<>(fixerService.createFixerResponse(), HttpStatus.CREATED);
+    @PostMapping("/current")
+    public ResponseEntity<FixerResponse> current(@RequestBody ApiRequestDTO dto){
+        String serviceName = "service: ".concat(JsonController.class.getName()).concat("; ep: current");
+        return ResponseEntity.ok(service.current(dto.getRequestId(), dto.getTimestamp(), dto.getCurrency(), dto.getClient(), serviceName));
     }
+
+    @PostMapping("/history")
+    public ResponseEntity<List<FixerResponse>> history(@RequestBody ApiRequestDTO dto){
+        String serviceName = "service: ".concat(JsonController.class.getName()).concat("; ep: history");
+        return ResponseEntity.ok(service.history(dto.getRequestId(), dto.getTimestamp(), dto.getClient(),dto.getHours(),serviceName));
+    }
+
 }

@@ -1,10 +1,9 @@
 package com.example.egt.controller;
 
-import com.example.egt.dto.FixerResponseDto;
 import com.example.egt.model.FixerResponse;
 import com.example.egt.service.FixerResponseService;
+import com.example.egt.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class XmlController {
 
-    private final FixerResponseService fixerService;
+    private final StatisticsService statisticsService;
 
-    @PostMapping("/create") // return FixerResponseDto but first make HashMap correct
+    @PostMapping("/command")
     public ResponseEntity<FixerResponse> create(){
-        return new ResponseEntity<>(fixerService.createFixerResponse(), HttpStatus.CREATED);
+        return null;
     }
 
 }
